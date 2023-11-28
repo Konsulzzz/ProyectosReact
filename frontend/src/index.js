@@ -11,7 +11,7 @@ import store from './store/index'
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
       main: '#130f14',
       light: '#c4c8e0',
@@ -31,6 +31,7 @@ const theme = createTheme({
       disabled: 'rgba(103,83,83,0.38)',
       hint: '#565269',
     },
+    
   },
   typography: {
     fontFamily: 'Oswald',
@@ -43,10 +44,26 @@ const theme = createTheme({
   },
   link:{
     color: '#FFFFFF',
-  }
-  
-
-})
+  },
+  overrides: {
+    MuiTable: {
+      root: {
+        
+        backgroundColor: '#3f51b5',
+      },
+    },
+    MuiTableCell: {
+      root: {
+        // Customize the styles of table cells
+        color: 'black', // Set text color to white
+      },
+      head: {
+        // Customize the styles of table header cells
+        fontWeight: 'bold', // Make the header text bold
+      },
+    },
+  },
+});
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
