@@ -11,7 +11,7 @@ import store from './store/index'
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
       main: '#130f14',
       light: '#c4c8e0',
@@ -41,6 +41,10 @@ const theme = createTheme({
       fontFamily: 'Oswald',
     },
   },
+  link:{
+    color: '#FFFFFF',
+  }
+  
 
 })
 const root = ReactDOM.createRoot(document.getElementById('root'));
