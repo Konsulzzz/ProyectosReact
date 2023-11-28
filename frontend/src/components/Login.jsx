@@ -8,10 +8,16 @@ import {
     Avatar,
     Typography,
 } from '@mui/material';
+ import { useNavigate } from 'react-router-dom';
+ import { useDispatch} from 'react-redux'
+ import { loginActions } from '../store/storelogin';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
@@ -24,27 +30,33 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        
-            fetch(`http://localhost:3030/login?user=${username}&password=${password}`)
-                .then(response => response.json())
-                .then(response => {
-                    if (response) {
-                        console.log(response);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during fetch:', error.message);
-                });
-       
-            /*
-            fetch(`http://localhost:3030/`)
-            .then(response => response.json())
-            .then(response => {
-                if (response) {
-                    console.log(response.message)
-                }
-            })*/ 
+        // Verificar campos vacíos
+        if (!username || !password) {
+            setError('Por favor, complete todos los campos.');
+            return;
+        }
 
+        fetch(`http://localhost:3030/login?user=${username}&password=${password}`)
+        .then(response => response.json())
+        .then(response => {
+            // Verificar si el usuario y la contraseña son correctos
+            if (response) {
+                setError('');
+                console.log(response.userData[0].nombre);
+
+                //Dispatch
+                dispatch(loginActions.login({
+                    name: response.userData[0].nombre,
+                    rol: response.userData[0].rol
+                    }))
+
+                navigate('/home')
+            } 
+        })
+        .catch(error => {
+            setError('Usuario o contraseña incorrectos.');
+            console.error('Error during fetch:', error.message);
+        });
     };
 
     return (
@@ -72,6 +84,11 @@ const Login = () => {
                         value={password}
                         onChange={handlePasswordChange}
                     />
+                    {error && (
+                        <Typography variant="body2" color="primary" align="center" paragraph>
+                            {error}
+                        </Typography>
+                    )}
                     <Button type="submit" variant="contained" color="primary" fullWidth>
                         Acceder
                     </Button>
